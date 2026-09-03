@@ -1,3 +1,4 @@
+from matplotlib.pylab import seed
 import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset, DataLoader
@@ -50,7 +51,8 @@ class QKDSequenceDataset(Dataset):
 def get_qkd_dataloaders(csv_path='data/qkd_simulated_telemetry.csv', 
                         window_size=50, 
                         batch_size=64, 
-                        train_split=0.8):
+                        train_split=0.8
+                        , seed=42):
 
     # load telemetry CSV
     df = pd.read_csv(csv_path)
@@ -79,7 +81,9 @@ def get_qkd_dataloaders(csv_path='data/qkd_simulated_telemetry.csv',
     # create the Pytorch dataloaders, which batch the data and move it to the models
     # shuffle = true to prevent model from learning exact sequence from the training set
     # and false for test set to keep chronological order for evaluation 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    g = torch.Generator()
+    g.manual_seed(seed)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=g)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
     
     print(f"DataLoaders successfully created!")

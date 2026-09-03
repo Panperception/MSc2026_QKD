@@ -10,6 +10,9 @@ from sklearn.metrics import classification_report, confusion_matrix, roc_auc_sco
 from src.dataset import get_qkd_dataloaders
 from src.model import QKDGatekeeperLSTM
 
+np.random.seed(42)
+torch.manual_seed(42)
+
 # parameters and configuration 
 WINDOW_SIZE = 50
 BATCH_SIZE = 64
@@ -21,7 +24,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 def train_model(model, train_loader, criterion, optimiser, epochs, device):
     # training loop for the LSTM model
-
+    
     model.to(device)
     
     train_losses = []
@@ -133,7 +136,7 @@ if __name__ == '__main__':
     print(f"Using Compute Device: {DEVICE}")
     
     
-    train_loader, test_loader, scaler = get_qkd_dataloaders(window_size=WINDOW_SIZE, batch_size=BATCH_SIZE)
+    train_loader, test_loader, scaler = get_qkd_dataloaders(window_size=WINDOW_SIZE, batch_size=BATCH_SIZE, seed=42)
     
     
     model = QKDGatekeeperLSTM(input_size=3, hidden_dim=64, num_layers=2)

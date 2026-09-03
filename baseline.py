@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 
 from src.dataset import get_qkd_dataloaders
 
+np.random.seed(42)
 # load dataloaders the same as for the nn for comparison
 
 train_loader, test_loader, scaler = get_qkd_dataloaders(
